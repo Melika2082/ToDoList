@@ -19,7 +19,7 @@ class taskTypeItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(8),
-      width: 140,
+      width: MediaQuery.of(context).size.width * 0.35,
       decoration: BoxDecoration(
         color: (selectedItemList == index) ? Color(0xff18DAA3) : Colors.white,
         border: Border.all(

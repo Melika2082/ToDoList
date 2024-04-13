@@ -1,6 +1,7 @@
 import 'package:database/screens/edit_task_screen.dart';
 import 'package:database/data/task.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 // ignore: must_be_immutable
 class TaskWidget extends StatefulWidget {
@@ -36,10 +37,10 @@ class _TaskWidgetState extends State<TaskWidget> {
       },
       child: Container(
         margin: EdgeInsets.symmetric(
-          horizontal: 24,
-          vertical: 12,
+          horizontal: 25,
+          vertical: 15,
         ),
-        height: 132,
+        height: MediaQuery.of(context).size.height * 0.16,
         width: double.infinity,
         decoration: BoxDecoration(
           color: Color(0xffffffff),
@@ -72,9 +73,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                       value: isBoxChecked,
                       onChanged: (isChacked) {},
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
                       ),
                     ),
                   ),
@@ -89,98 +88,102 @@ class _TaskWidgetState extends State<TaskWidget> {
                   ),
                 ],
               ),
-              SizedBox(height: 5),
-              Text(
-                widget.task.subTitle,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.right,
-                style: TextStyle(fontFamily: 'SM', fontSize: 12),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.001),
+              Directionality(
+                textDirection: TextDirection.rtl,
+                child: Text(
+                  widget.task.subTitle,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(fontFamily: 'SM', fontSize: 12),
+                ),
               ),
               Spacer(),
               getTimeAndEditBadgs(),
             ],
           ),
         ),
-        SizedBox(width: 20),
+        SizedBox(width: MediaQuery.of(context).size.width * 0.01),
         Image.asset(widget.task.taskType.image),
       ],
     );
   }
 
-  Row getTimeAndEditBadgs() {
-    return Row(
-      children: [
-        Container(
-          width: 92,
-          height: 28,
-          decoration: BoxDecoration(
-            color: Color(0xff18DAA3),
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 6,
-            ),
-            child: Row(
-              children: [
-                Text(
-                  '${widget.task.time.hour}:${getMinUnderTen(widget.task.time)}',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontFamily: 'SM',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 10),
-                Image.asset('images/icon_time.png'),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(width: 15),
-        InkWell(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => EditTaskScreen(
-                  task: widget.task,
-                ),
-              ),
-            );
-          },
-          child: Container(
-            width: 92,
-            height: 28,
-            decoration: BoxDecoration(
-              color: Color(0xffE2F6F1),
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
+  LayoutBuilder getTimeAndEditBadgs() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double width = constraints.maxWidth;
+        return Row(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.20,
+              height: MediaQuery.of(context).size.height * 0.035,
+              decoration: BoxDecoration(
+                color: Color(0xff18DAA3),
+                borderRadius: BorderRadius.circular(18),
               ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'ویرایش',
+                    '${widget.task.time.hour}:${getMinUnderTen(widget.task.time)}',
                     style: TextStyle(
-                      color: Color(0xff18DAA3),
+                      color: Colors.white,
                       fontSize: 12,
                       fontFamily: 'SM',
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(width: 10),
-                  Image.asset('images/icon_edit.png'),
+                  SizedBox(width: width * 0.025),
+                  Image.asset(
+                    'images/icon_time.png',
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
                 ],
               ),
             ),
-          ),
-        ),
-      ],
+            SizedBox(width: width * 0.05),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => EditTaskScreen(
+                      task: widget.task,
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.20,
+                height: MediaQuery.of(context).size.height * 0.035,
+                decoration: BoxDecoration(
+                  color: Color(0xffE2F6F1),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'ویرایش',
+                      style: TextStyle(
+                        color: Color(0xff18DAA3),
+                        fontSize: 12,
+                        fontFamily: 'SM',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: width * 0.025),
+                    Image.asset(
+                      'images/icon_edit.png',
+                      height: MediaQuery.of(context).size.height * 0.02,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
